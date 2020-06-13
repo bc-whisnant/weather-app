@@ -32,3 +32,13 @@ export default {
   }),
 };
 </script>
+
+<style>
+ * {
+   font-family: 'Roboto Condensed', sans-serif;
+ }
+ h3,
+ h4 {
+   font-weight: 400;
+ }
+</style>

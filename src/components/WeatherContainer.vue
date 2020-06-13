@@ -14,13 +14,24 @@
           </v-card-actions>
         </v-card>
       </v-col>
-      <v-col v-if="submitted">
-        <h1>Location: {{ name }}</h1>
-        <h3>Description: {{ description }}</h3>
-        <h3>Current: {{ currentTemp }}</h3>
-        <h3>Max Temp: {{ maxTemp }}</h3>
-        <h3>Min Temp: {{ minTemp }}</h3>
-        <h3>Feels Like: {{ feelsLike }}</h3>
+      <v-col v-if="submitted" cols="12">
+        <v-card flat>
+          <v-card-title class="headline"></v-card-title>
+          <div class="information">
+            <h3>Location: {{ name }}</h3>
+            <br />
+            <h4>Description: {{ description }}</h4>
+            <br />
+
+            <h4>Current: {{ currentTemp }}</h4>
+            <br />
+            <h4>Max Temp: {{ maxTemp }}</h4>
+            <br />
+            <h4>Min Temp: {{ minTemp }}</h4>
+            <br />
+            <h4>Feels Like: {{ feelsLike }}</h4>
+          </div>
+        </v-card>
       </v-col>
     </v-row>
   </v-container>
@@ -88,7 +99,18 @@ export default {
 
 <style scoped>
 .weather-container {
-  max-width: 500px;
+  max-width: 65%;
   margin: 0 auto;
+}
+
+.information {
+  text-align: center;
+}
+
+@media screen and (max-width: 700px) {
+  .weather-container {
+    max-width: 80%;
+    margin: 0 auto;
+  }
 }
 </style>
