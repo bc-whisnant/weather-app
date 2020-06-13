@@ -18,18 +18,8 @@
         <v-card flat>
           <v-card-title class="headline"></v-card-title>
           <div class="information">
-            <h3>Location: {{ name }}</h3>
-            <br />
-            <h4>Description: {{ description }}</h4>
-            <br />
-
-            <h4>Current: {{ currentTemp }}</h4>
-            <br />
-            <h4>Max Temp: {{ maxTemp }}</h4>
-            <br />
-            <h4>Min Temp: {{ minTemp }}</h4>
-            <br />
-            <h4>Feels Like: {{ feelsLike }}</h4>
+            <p> In {{ name }} the weather is described as {{ description }}. The current temperature is {{ currentTemp }} degrees.</p>
+            <p>The max today was {{ maxTemp }} and the min was {{ minTemp }}. It feels like it is {{feelsLike }} degrees.</p>
           </div>
         </v-card>
       </v-col>
