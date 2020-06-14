@@ -4,11 +4,17 @@
       <v-col cols="12">
         <v-card ref="form" flat>
           <v-card-text>
-            <BaseInput v-model="form.query" />
+            <ValidationObserver ref="observer" v-slot="{ handleSubmit }">
+              <v-form @submit.prevent="handleSubmit(onSubmit)">
+                <validation-provider v-slot="{ errors }" name="weather-field" rules="required">
+                   <BaseInputWithValidation v-model="form.query" :error-messages="errors" data-cy="weather-input"/>
+                </validation-provider>
+              </v-form>
+            </ValidationObserver>
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <base-button @click="searchWeather" color="secondary"
+            <base-button @click="searchWeatherAndValidate" color="secondary" data-cy="search-btn"
               >Search</base-button
             >
           </v-card-actions>
@@ -17,9 +23,12 @@
       <v-col v-if="submitted" cols="12">
         <v-card flat>
           <v-card-title class="headline"></v-card-title>
-          <div class="information">
+          <div class="information" v-if="valid">
             <p> In {{ name }} the weather is described as {{ description }}. The current temperature is {{ currentTemp }} degrees.</p>
             <p>The max today was {{ maxTemp }} and the min was {{ minTemp }}. It feels like it is {{feelsLike }} degrees.</p>
+          </div>
+          <div class="information" v-else>
+            <p>There are errors in the form</p>
           </div>
         </v-card>
       </v-col>
@@ -28,14 +37,19 @@
 </template>
 
 <script>
+import { withValidation, ValidationObserver, ValidationProvider } from 'vee-validate'
 import BaseInput from "./BaseComponents/BaseInput";
 import BaseButton from "./BaseComponents/BaseButton";
 import axios from "axios";
 
+const BaseInputWithValidation = withValidation(BaseInput)
+
 export default {
   name: "WeatherContainer",
   components: {
-    BaseInput,
+    ValidationObserver,
+    ValidationProvider,
+    BaseInputWithValidation,
     BaseButton,
   },
   data() {
@@ -53,14 +67,15 @@ export default {
       name: "",
       description: "",
       submitted: false,
+      valid: false
     };
   },
   methods: {
-    testing() {
-      console.log("testing");
-    },
-    searchWeather() {
-      axios
+    async searchWeatherAndValidate() {
+      this.valid = await this.$refs.observer.validate()
+
+      if (this.valid) {
+        axios
         .get(
           `https://api.openweathermap.org/data/2.5/weather?q=${this.form.query}&units=imperial&apikey=${this.API_KEY}`
         )
@@ -82,6 +97,8 @@ export default {
           this.minTemp = temp_min;
           this.description = description;
         });
+      }
+      this.submitted = true
     },
   },
 };
