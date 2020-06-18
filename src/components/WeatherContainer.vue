@@ -14,8 +14,9 @@
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <base-button @click="searchWeatherAndValidate" color="secondary" data-cy="search-btn"
-              >Search</base-button
+            <base-button @click="searchWeatherAndValidate" color="secondary" data-cy="search-btn">
+              Search
+            </base-button
             >
           </v-card-actions>
         </v-card>
@@ -74,7 +75,8 @@ export default {
     async searchWeatherAndValidate() {
       this.valid = await this.$refs.observer.validate()
 
-      if (this.valid) {
+      try {
+        if (this.valid) {
         axios
         .get(
           `https://api.openweathermap.org/data/2.5/weather?q=${this.form.query}&units=imperial&apikey=${this.API_KEY}`
@@ -99,6 +101,11 @@ export default {
         });
       }
       this.submitted = true
+      } catch(err) {
+        console.log(err)
+      }
+
+      
     },
   },
 };
